@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="分離器械臨床溝通與處理逐步指引" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><circle cx='32' cy='32' r='30' fill='%235d615e'/><text x='32' y='40' text-anchor='middle' font-size='25' fill='white'>BF</text></svg>" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&family=Noto+Serif+TC:wght@600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css" />
+    <title>分離器械｜臨床溝通指引</title>
+  </head>
+  <body>
+    <section class="password-gate" id="password-gate" aria-labelledby="gate-title">
+      <div class="gate-panel">
+        <img class="gate-logo" src="./assets/tienhao-logo-color.png" alt="張添皓醫師・顯微根管治療中心" />
+        <p class="gate-eyebrow">PRIVATE CLINICAL GUIDE</p>
+        <h1 id="gate-title">分離器械<br />臨床溝通指引</h1>
+        <p class="gate-intro">本網站僅供課程學員與授權使用者查閱。</p>
+        <form id="password-form">
+          <label for="password-input">請輸入存取密碼</label>
+          <div class="password-field">
+            <input id="password-input" type="password" inputmode="text" autocomplete="current-password" required />
+            <button type="button" id="password-toggle" aria-label="顯示密碼">顯示</button>
+          </div>
+          <p class="password-error" id="password-error" role="alert" hidden>密碼不正確，請重新輸入。</p>
+          <button class="gate-submit" type="submit">進入指引</button>
+        </form>
+        <p class="gate-note">© 2016–2026 張添皓醫師・All rights reserved.</p>
+      </div>
+    </section>
+
+    <div id="protected-app" hidden>
+    <header class="topbar">
+      <button class="brand" data-action="home">
+        <img class="brand-logo" src="./assets/tienhao-logo-color.png" alt="張添皓醫師・顯微根管治療中心" />
+        <span class="brand-product"><b>分離器械</b><small>臨床溝通指引</small></span>
+      </button>
+      <div class="top-actions">
+        <button class="search-button" data-action="search">⌕ <span>搜尋對話</span></button>
+        <button class="menu-button" data-action="toggle-nav" aria-label="開啟選單">☰</button>
+      </div>
+    </header>
+
+    <div class="app-layout">
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-head">
+          <p>臨床情境</p>
+          <button data-action="toggle-nav">×</button>
+        </div>
+        <nav id="case-nav"></nav>
+        <div class="sidebar-tools">
+          <button data-page="framework">共通處理框架</button>
+          <button data-page="faq">病人常見追問</button>
+          <button data-page="record">病歷紀錄模板</button>
+        </div>
+      </aside>
+
+      <main id="app"></main>
+    </div>
+
+    <footer class="copyright-footer">
+      <div class="copyright-inner">
+        <div class="copyright-brand">
+          <img src="./assets/tienhao-logo-white.png" alt="張添皓醫師・顯微根管治療中心" />
+        </div>
+        <div class="copyright-copy">
+          <p class="copyright-title">© 2016–2026 張添皓醫師</p>
+          <p>（顯微根管治療）<br /><a href="https://dentistry.tw" target="_blank" rel="noopener">dentistry.tw</a> · 版權所有<br />All rights reserved.</p>
+        </div>
+        <div class="copyright-legal">
+          <p>本軟體為專有且具機密性質，未經書面授權不得使用、重製、散布或傳輸。</p>
+          <p>This software is proprietary and confidential. No part may be used, reproduced, redistributed, or transmitted without prior written permission.</p>
+        </div>
+      </div>
+    </footer>
+    </div>
+
+    <div class="search-modal" id="search-modal" hidden>
+      <div class="search-backdrop" data-action="close-search"></div>
+      <section class="search-card">
+        <div class="search-field">
+          <span>⌕</span>
+          <input id="search-input" type="search" placeholder="搜尋：轉診、費用、醫療疏失、同意書…" autocomplete="off" />
+          <button data-action="close-search">×</button>
+        </div>
+        <div id="search-results"></div>
+      </section>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
