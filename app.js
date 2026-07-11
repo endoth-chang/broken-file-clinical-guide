@@ -234,7 +234,7 @@ const tools = {
 
 let current = {type:"home",id:null};
 const app=document.querySelector("#app"), nav=document.querySelector("#case-nav"), sidebar=document.querySelector("#sidebar");
-const PASSWORD_HASH=(window.BROKEN_FILE_TRAINING_CONFIG?.passwordHash||"").trim().toLowerCase();
+const PASSWORD_HASH=(window.BROKEN_FILE_TRAINING_CONFIG?.passwordHash||"f376e8c61d025645c37933b5cad900022f76df122a6e26455005e81cb8d8cbf9").trim().toLowerCase();
 const gate=document.querySelector("#password-gate"), protectedApp=document.querySelector("#protected-app");
 
 async function digestPassword(value){
