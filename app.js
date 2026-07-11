@@ -234,7 +234,7 @@ const tools = {
 
 let current = {type:"home",id:null};
 const app=document.querySelector("#app"), nav=document.querySelector("#case-nav"), sidebar=document.querySelector("#sidebar");
-const PASSWORD_HASH="f376e8c61d025645c37933b5cad900022f76df122a6e26455005e81cb8d8cbf9";
+const PASSWORD_HASH=(window.BROKEN_FILE_TRAINING_CONFIG?.passwordHash||"").trim().toLowerCase();
 const gate=document.querySelector("#password-gate"), protectedApp=document.querySelector("#protected-app");
 
 async function digestPassword(value){
@@ -252,7 +252,7 @@ document.querySelector("#password-form").addEventListener("submit",async event=>
   event.preventDefault();
   const input=document.querySelector("#password-input");
   const error=document.querySelector("#password-error");
-  if(await digestPassword(input.value)===PASSWORD_HASH){
+  if(PASSWORD_HASH && await digestPassword(input.value)===PASSWORD_HASH){
     sessionStorage.setItem("bf-guide-access","granted");
     error.hidden=true;
     unlockApp();
@@ -277,13 +277,29 @@ function renderNav(){
 function renderHome(){
   current={type:"home",id:null}; renderNav();
   app.innerHTML=`<section class="home"><p class="eyebrow">CLINICAL COMMUNICATION GUIDE</p><h1>分離器械<br>逐步處理與對話指引</h1><p class="home-lead">不是測驗。選擇臨床情境後，依序查看當下要做什麼、怎麼說、病人可能怎麼追問，以及病歷要留下什麼。</p><div class="notice"><b>使用原則：</b>建議說法需依個案事實調整。已確認的事件應直接告知；尚未確認的影像與因果則需保留不確定性。</div><div class="home-grid">${cases.map(c=>`<button class="home-card" data-case="${c.id}"><span class="index">${c.no}</span><h2>${c.title}</h2><p>${c.card}</p><small>開啟完整指引 →</small></button>`).join("")}</div></section>`;
+  /*
+  document.querySelector(".home-lead").insertAdjacentHTML("afterend",'<div class="guide-meta"><span>???? v1.1</span><span>???? 2026-07-11</span><span>????????</span></div>');
+  document.querySelector(".notice").insertAdjacentHTML("afterend",'<button class="quick-hero-button" data-action="quick"><b>30 ?????</b><span>????????????????????????? ?</span></button>');
+  */
+  document.querySelector(".home-lead").insertAdjacentHTML("afterend",'<div class="guide-meta"><span>\u5167\u5bb9\u7248\u672c v1.1</span><span>\u6700\u5f8c\u5be9\u95b1 2026-07-11</span><span>\u53f0\u7063\u81e8\u5e8a\u6559\u5b78\u60c5\u5883</span></div>');
+  document.querySelector(".notice").insertAdjacentHTML("afterend",'<button class="quick-hero-button" data-action="quick"><b>30 \u79d2\u5feb\u901f\u8655\u7406</b><span>\u8a3a\u9593\u7576\u4e0b\u5148\u770b\uff1a\u73fe\u5728\u505a\u4ec0\u9ebc\u3001\u7b2c\u4e00\u53e5\u600e\u9ebc\u8aaa\u3001\u54ea\u53e5\u4e0d\u80fd\u8aaa \u2192</span></button>');
   window.scrollTo(0,0);
 }
-function renderCase(id){
+function renderQuick(){
+  current={type:"quick",id:null}; renderNav();
+  /*
+  app.innerHTML=`<section class="tool-page quick-page"><p class="eyebrow">30-SECOND ACTION GUIDE</p><h1>30 ?????</h1><p class="tool-lead">???????????????????????????????????</p><div class="quick-case-grid">${cases.map(c=>{const p=c.phases[0];const firstDoctor=p.dialogue.find(line=>line.role==="??")||p.dialogue[0];return `<article class="quick-case"><div class="quick-case-head"><span>${c.no}</span><h2>${c.title}</h2></div><div class="quick-block"><b>????</b><ol>${p.actions.slice(0,3).map(x=>`<li>${x}</li>`).join("")}</ol></div><div class="quick-block say"><b>????????</b><p>${firstDoctor.text}</p><button class="copy-block" data-copy="${encodeURIComponent(firstDoctor.text)}">????</button></div><div class="quick-block stop"><b>?????</b><p>${p.warnTip.text.replace(/^(??|??)[?:]?/,"")}</p></div><button class="open-full" data-case="${c.id}">?????? ?</button></article>`}).join("")}</div></section>`;
+  */
+  app.innerHTML=`<section class="tool-page quick-page"><p class="eyebrow">30-SECOND ACTION GUIDE</p><h1>30 \u79d2\u5feb\u901f\u8655\u7406</h1><p class="tool-lead">\u5148\u7a69\u4f4f\u7576\u4e0b\uff0c\u518d\u958b\u555f\u5b8c\u6574\u6307\u5f15\u3002\u6bcf\u5f35\u5361\u53ea\u4fdd\u7559\u7acb\u5373\u884c\u52d5\u3001\u7b2c\u4e00\u53e5\u8a71\u8207\u7981\u5fcc\u8aaa\u6cd5\u3002</p><div class="quick-case-grid">${cases.map(c=>{const p=c.phases[0];const firstDoctor=p.dialogue.find(line=>line.role==="\u91ab\u5e2b")||p.dialogue[0];return `<article class="quick-case"><div class="quick-case-head"><span>${c.no}</span><h2>${c.title}</h2></div><div class="quick-block"><b>\u73fe\u5728\u5148\u505a</b><ol>${p.actions.slice(0,3).map(x=>`<li>${x}</li>`).join("")}</ol></div><div class="quick-block say"><b>\u7b2c\u4e00\u53e5\u53ef\u4ee5\u9019\u6a23\u8aaa</b><p>${firstDoctor.text}</p><button class="copy-block" data-copy="${encodeURIComponent(firstDoctor.text)}">\u8907\u88fd\u9019\u53e5</button></div><div class="quick-block stop"><b>\u9019\u53e5\u4e0d\u8981\u8aaa</b><p>${p.warnTip.text.replace(/^(?:\u907f\u514d|\u7981\u6b62)[\uFF1A:]?/,"")}</p></div><button class="open-full" data-case="${c.id}">\u958b\u555f\u5b8c\u6574\u6307\u5f15 \u2192</button></article>`}).join("")}</div></section>`;
+  window.scrollTo(0,0);
+}
+
+function renderCase(id,phaseIndex=null){
   const c=cases.find(x=>x.id===id); current={type:"case",id}; renderNav();
   app.innerHTML=`<article class="guide"><header class="guide-title"><p class="eyebrow">CASE ${c.no}</p><h1>${c.title}</h1><p class="summary">${c.summary}</p><div class="context-strip">${c.context.map(x=>`<span>${x}</span>`).join("")}</div></header><nav class="quick-jump">${c.phases.map((p,i)=>`<a href="#phase-${i}">${i+1}. ${p.title}</a>`).join("")}<a href="#final-check">最後檢核</a></nav>${c.phases.map(renderPhase).join("")}<section class="phase" id="final-check"><div class="phase-head"><span class="phase-number">✓</span><div><h2>離開診間前檢核</h2><p class="phase-goal">確認說明、選擇、紀錄與追蹤均已形成閉環。</p></div></div><div class="checklist">${c.checklist.map((x,i)=>`<label><input type="checkbox" data-check="${c.id}-${i}"><span>${x}</span></label>`).join("")}</div></section><div class="guide-footer"><h3>這份指引的重點</h3><p>不要急著證明自己沒錯。先確保安全、說清楚事實、承接病人情緒，再提供可執行的選項與追蹤。</p></div></article>`;
   restoreChecks(c.id);
   window.scrollTo(0,0);
+  if(phaseIndex!==null) requestAnimationFrame(()=>document.querySelector(`#phase-${phaseIndex}`)?.scrollIntoView({behavior:"smooth"}));
 }
 function renderPhase(p,i){
   return `<section class="phase" id="phase-${i}"><div class="phase-head"><span class="phase-number">${i+1}</span><div><h2>${p.title}</h2><p class="phase-goal">${p.goal}</p></div></div><ol class="action-list">${p.actions.map(x=>`<li>${x}</li>`).join("")}</ol><div class="dialogue">${p.dialogue.map(line=>`<div class="line ${line.role==="病人"?"patient":"doctor"}"><strong>${line.role}</strong>${line.text}<button class="copy-line" data-copy="${encodeURIComponent(line.text)}">複製</button></div>`).join("")}</div><div class="tip-grid"><div class="tip good"><b>建議重點</b>${p.goodTip.text}</div><div class="tip warn"><b>避免這樣說</b>${p.warnTip.text}</div></div></section>`;
@@ -301,7 +317,7 @@ function saveCheck(input){const data=JSON.parse(localStorage.getItem("bf-guide-c
 function restoreChecks(id){const data=JSON.parse(localStorage.getItem("bf-guide-checks")||"{}");document.querySelectorAll(`[data-check^="${id}-"]`).forEach(x=>x.checked=Boolean(data[x.dataset.check]))}
 function allSearchData(){
   const rows=[];
-  cases.forEach(c=>c.phases.forEach((p,i)=>{rows.push({caseId:c.id,label:c.title,title:p.title,text:[p.goal,...p.actions,...p.dialogue.map(x=>x.text),p.goodTip.text,p.warnTip.text].join(" ")})}));
+  cases.forEach(c=>c.phases.forEach((p,i)=>{rows.push({caseId:c.id,phaseIndex:i,label:c.title,title:p.title,text:[p.goal,...p.actions,...p.dialogue.map(x=>x.text),p.goodTip.text,p.warnTip.text].join(" ")})}));
   tools.faq.items.forEach(x=>rows.push({page:"faq",label:"病人常見追問",title:x[0],text:x[1]}));
   tools.record.items.forEach(x=>rows.push({page:"record",label:"病歷紀錄模板",title:x[0],text:x[1]}));
   return rows;
@@ -310,13 +326,15 @@ function search(q){
   const box=document.querySelector("#search-results"); if(!q.trim()){box.innerHTML='<div class="empty-search">輸入關鍵字，快速找到對話與處理步驟。</div>';return}
   const key=q.trim().toLowerCase(), results=allSearchData().filter(x=>(x.title+" "+x.text).toLowerCase().includes(key)).slice(0,20);
   box.innerHTML=results.length?results.map(x=>`<button class="search-result" ${x.caseId?`data-case="${x.caseId}"`:`data-page="${x.page}"`}><small>${x.label}</small><b>${x.title}</b><p>${x.text.slice(0,110)}…</p></button>`).join(""):'<div class="empty-search">找不到相符內容。</div>';
+  {const caseResults=results.filter(x=>x.caseId);box.querySelectorAll("[data-case]").forEach((button,index)=>button.dataset.phase=caseResults[index].phaseIndex);}
 }
 document.addEventListener("click",async e=>{
-  const caseBtn=e.target.closest("[data-case]"); if(caseBtn){renderCase(caseBtn.dataset.case);closeOverlays();return}
+  const caseBtn=e.target.closest("[data-case]"); if(caseBtn){const phase=caseBtn.dataset.phase===undefined?null:Number(caseBtn.dataset.phase);renderCase(caseBtn.dataset.case,phase);closeOverlays();return}
   const pageBtn=e.target.closest("[data-page]"); if(pageBtn){renderTool(pageBtn.dataset.page);closeOverlays();return}
   const copy=e.target.closest("[data-copy]"); if(copy){await navigator.clipboard.writeText(decodeURIComponent(copy.dataset.copy));const old=copy.textContent;copy.textContent="已複製";copy.classList.add("copied");setTimeout(()=>{copy.textContent=old;copy.classList.remove("copied")},1200);return}
   const action=e.target.closest("[data-action]")?.dataset.action;
   if(action==="home")renderHome();
+  if(action==="quick")renderQuick();
   if(action==="toggle-nav")sidebar.classList.toggle("open");
   if(action==="search"){document.querySelector("#search-modal").hidden=false;document.querySelector("#search-input").focus();search("")}
   if(action==="close-search")document.querySelector("#search-modal").hidden=true;
