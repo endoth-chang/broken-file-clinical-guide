@@ -235,6 +235,7 @@ const tools = {
 let current = {type:"home",id:null};
 const app=document.querySelector("#app"), nav=document.querySelector("#case-nav"), sidebar=document.querySelector("#sidebar");
 const PASSWORD_HASH=(window.BROKEN_FILE_TRAINING_CONFIG?.passwordHash||"f376e8c61d025645c37933b5cad900022f76df122a6e26455005e81cb8d8cbf9").trim().toLowerCase();
+const ACCESS_PASSWORD=(window.BROKEN_FILE_TRAINING_CONFIG?.accessPassword||"endosi").trim();
 const gate=document.querySelector("#password-gate"), protectedApp=document.querySelector("#protected-app");
 
 async function digestPassword(value){
@@ -248,11 +249,11 @@ function unlockApp(){
   document.body.classList.add("unlocked");
 }
 if(sessionStorage.getItem("bf-guide-access")==="granted") unlockApp();
-document.querySelector("#password-form").addEventListener("submit",async event=>{
+document.querySelector("#password-form").addEventListener("submit",event=>{
   event.preventDefault();
   const input=document.querySelector("#password-input");
   const error=document.querySelector("#password-error");
-  if(PASSWORD_HASH && await digestPassword(input.value)===PASSWORD_HASH){
+  if(input.value.trim()===ACCESS_PASSWORD){
     sessionStorage.setItem("bf-guide-access","granted");
     error.hidden=true;
     unlockApp();
